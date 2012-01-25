@@ -2,13 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using Northwind.Common.ServiceModel;
-using Platform.Text;
 using ProtoBuf;
 
 namespace Northwind.Common.ComplexModel
 {
 	[ProtoContract(ImplicitFields = ImplicitFields.AllPublic, InferTagFromName = true)]
-	[TextRecord]
 	[DataContract]
 	public class CustomerOrderListDto
 	{
@@ -18,11 +16,9 @@ namespace Northwind.Common.ComplexModel
 		}
 
 		[DataMember]
-		[TextField]
 		public CustomerDto Customer { get; set; }
 
 		[DataMember]
-		[TextField]
 		public List<FullOrderDto> Orders { get; set; }
 
 		public override bool Equals(object obj)

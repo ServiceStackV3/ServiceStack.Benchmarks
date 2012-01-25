@@ -1,28 +1,22 @@
 using System.Runtime.Serialization;
 using Northwind.Common.ServiceModel;
-using Platform.Text;
 using ProtoBuf;
 
 namespace Northwind.Common.ComplexModel
 {
 	[ProtoContract(ImplicitFields = ImplicitFields.AllPublic, InferTagFromName = true)]
-	[TextRecord]
 	[DataContract]
 	public class MultiOrderProperties
 	{
-		[TextField]
 		[DataMember]
 		public OrderDto Orders1 { get; set; }
 
-		[TextField]
 		[DataMember]
 		public OrderDto Orders2 { get; set; }
 
-		[TextField]
 		[DataMember]
 		public OrderDto Orders3 { get; set; }
 
-		[TextField]
 		[DataMember]
 		public OrderDto Orders4 { get; set; }
 

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="Northwind.Benchmarks">
+</Property><Property Name="Solution File" Value="C:\src\ServiceStack.Benchmarks\src\Northwind.Benchmarks\Northwind.Benchmarks.sln">
+</Property><Property Name="Date" Value="Tuesday, January 24, 2012">
+</Property><Property Name="Time" Value="2:40 AM">
+</Property></Properties><Event ErrorLevel="0" Project="Northwind.Benchmarks" Source="Northwind.Benchmarks\Northwind.Benchmarks.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="Northwind.Benchmarks" Source="Northwind.Benchmarks\Northwind.Benchmarks.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="Northwind.Perf" Source="Northwind.Perf\Northwind.Perf.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="Northwind.Perf" Source="Northwind.Perf\Northwind.Perf.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="Northwind.Common" Source="Northwind.Common\Northwind.Common.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="Northwind.Common" Source="Northwind.Common\Northwind.Common.csproj" Description="Converted">
+</Event><Event ErrorLevel="2" Project="ServiceStack.OrmLite" Source="..\ServiceStack.OrmLite\ServiceStack.OrmLite\ServiceStack.OrmLite.csproj" Description="Unable to open project file to perform upgrade.  ">
+</Event><Event ErrorLevel="2" Project="ServiceStack.OrmLite.Sqlite" Source="..\ServiceStack.OrmLite\ServiceStack.OrmLite.Sqlite\ServiceStack.OrmLite.Sqlite.csproj" Description="Unable to open project file to perform upgrade.  ">
+</Event><Event ErrorLevel="2" Project="ServiceStack.Redis" Source="..\ServiceStack.Redis\ServiceStack.Redis\ServiceStack.Redis.csproj" Description="Unable to open project file to perform upgrade.  ">
+</Event><Event ErrorLevel="2" Project="ServiceStack.Common" Source="..\ServiceStack.Common\ServiceStack.Common\ServiceStack.Common.csproj" Description="Unable to open project file to perform upgrade.  ">
+</Event><Event ErrorLevel="2" Project="ServiceStack.Client" Source="..\ServiceStack.Common\ServiceStack.Client\ServiceStack.Client.csproj" Description="Unable to open project file to perform upgrade.  ">
+</Event><Event ErrorLevel="0" Project="Northwind.Benchmarks.Console" Source="Northwind.Benchmarks.Console\Northwind.Benchmarks.Console.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="Northwind.Benchmarks.Console" Source="Northwind.Benchmarks.Console\Northwind.Benchmarks.Console.csproj" Description="Converted">
+</Event><Event ErrorLevel="2" Project="ServiceStack.Text" Source="..\ServiceStack.Text\ServiceStack.Text\ServiceStack.Text.csproj" Description="Unable to open project file to perform upgrade.  ">
+</Event><Event ErrorLevel="0" Project="" Source="Northwind.Benchmarks.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="Northwind.Benchmarks.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="Northwind.Benchmarks" Source="Northwind.Benchmarks\Northwind.Benchmarks.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="Northwind.Perf" Source="Northwind.Perf\Northwind.Perf.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="Northwind.Common" Source="Northwind.Common\Northwind.Common.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="Northwind.Benchmarks.Console" Source="Northwind.Benchmarks.Console\Northwind.Benchmarks.Console.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

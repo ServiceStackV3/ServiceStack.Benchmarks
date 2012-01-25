@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,8 +10,28 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Northwind.Benchmarks</RootNamespace>
     <AssemblyName>Northwind.Benchmarks</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +41,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +50,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Db4objects.Db4o, Version=7.11.110.13604, Culture=neutral, PublicKeyToken=6199cd4f203aa8eb, processorArchitecture=x86">
@@ -43,38 +65,32 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\Jayrock.Json.dll</HintPath>
     </Reference>
+    <Reference Include="JsonFx">
+      <HintPath>..\Lib\JsonFx.dll</HintPath>
+    </Reference>
     <Reference Include="LitJson, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\LitJson.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json.Net20, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Newtonsoft.Json.Net20.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ServiceStack.Common\Lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Platform, Version=1.0.0.341, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Platform.dll</HintPath>
+    <Reference Include="nunit.framework">
+      <HintPath>..\Lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net, Version=1.0.0.278, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.DataAccess.Db4oProvider, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\release\latest\ServiceStack.DataAccess.Db4oProvider.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\release\latest\ServiceStack.Interfaces.dll</HintPath>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\Lib\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.Extensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -89,43 +105,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicPersistenceProviders\BasicPersistenceProviderScenarioBase.cs" />
-    <Compile Include="BasicPersistenceProviders\Db4o\InsertNorthwindDatabase.cs" />
-    <Compile Include="BasicPersistenceProviders\OrmLite\InsertNorthwindDatabase.cs" />
-    <Compile Include="BasicPersistenceProviders\Redis\InsertNorthwindDatabase.cs" />
+    <Compile Include="Serialization\JsonUtils.cs" />
     <Compile Include="Serialization\NorthwindDatabaseRowsSerialization.cs" />
     <Compile Include="SerializersBenchmarkEntry.cs" />
     <Compile Include="Serialization\NorthwindDatabaseTablesSerialization.cs" />
     <Compile Include="Serialization\SerializationTestBase.cs" />
     <Compile Include="Serialization\SingleModelSerializationPerf.cs" />
-    <Compile Include="Serialization\TextDeserializerPerfTests.cs" />
-    <Compile Include="Serialization\TextSerializerPerfTests.cs" />
     <Compile Include="Serialization\TextTestBase.cs" />
     <Compile Include="Serialization\TypeToStringTests.cs" />
     <Compile Include="_Misc\StopWatchTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ServiceStack.Common\ServiceStack.Client\ServiceStack.Client.csproj">
-      <Project>{6B133D45-91D4-4AA5-A6D4-247282879CBB}</Project>
-      <Name>ServiceStack.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ServiceStack.Common\ServiceStack.Common\ServiceStack.Common.csproj">
-      <Project>{982416DB-C143-4028-A0C3-CF41892D18D3}</Project>
-      <Name>ServiceStack.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ServiceStack.OrmLite\ServiceStack.OrmLite.Sqlite\ServiceStack.OrmLite.Sqlite.csproj">
-      <Project>{CF68A37D-D071-469D-AE04-68594CB95382}</Project>
-      <Name>ServiceStack.OrmLite.Sqlite</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ServiceStack.OrmLite\ServiceStack.OrmLite\ServiceStack.OrmLite.csproj">
-      <Project>{96179AC6-F6F1-40C3-9FDD-4F6582F54C5C}</Project>
-      <Name>ServiceStack.OrmLite</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ServiceStack.Redis\ServiceStack.Redis\ServiceStack.Redis.csproj">
-      <Project>{AF99F19B-4C04-4F58-81EF-B092F1FCC540}</Project>
-      <Name>ServiceStack.Redis</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ServiceStack.Text\ServiceStack.Text\ServiceStack.Text.csproj">
+    <ProjectReference Include="..\..\..\..\ServiceStack.Text\src\ServiceStack.Text\ServiceStack.Text.csproj">
       <Project>{579B3FDB-CDAD-44E1-8417-885C38E49A0E}</Project>
       <Name>ServiceStack.Text</Name>
     </ProjectReference>
@@ -153,6 +145,23 @@
     <Folder Include="Databases\SqlServer\" />
     <Folder Include="WebServices\ServiceStack\" />
     <Folder Include="WebServices\Wcf\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

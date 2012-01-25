@@ -1,0 +1,85 @@
+<html>
+<head>
+	<title>Serialization benchmark results</title>
+	<link href='default.css' rel='stylesheet' type='text/css' />
+</head>
+<body>
+
+<h2>Results of <span>NorthwindDatabaseRowsSerialization</span> benchmarks run at 1/25/2012</h2>
+<span class="summary">These benchmarks show the total time in ticks (1/1000ms) that it takes each serializer to serialize and deserialize the first row from each table in the  <a href='http://code.google.com/p/servicestack/source/browse/trunk/Common/Northwind.Benchmarks/Northwind.Common/DataModel/NorthwindData.cs'>Northwind Database</a><strong>100,000</strong> Times. <br/><br/>The full source code of the serialization benchmarks (which generated this report) is <a href='http://code.google.com/p/servicestack/source/browse/trunk/Common/Northwind.Benchmarks/Northwind.Benchmarks.Console/Program.cs'>available here</a>.</span><div id='combined'>
+<h3>Combined results of all benchmarks below</h3><table>
+<caption>* All times measured in ticks and payload size in bytes</caption><thead><tr><th>Serializer</th><th>Payload size</th><th>Larger than best</th><th>Serialization</th><th>Deserialization</th><th>Total</th><th>Avg per iteration</th><th>Slower than best</th></tr></thead>
+<tbody>
+<tr class='best-size best-time'><th class='c1'>ProtoBuf.net</th><td>879</td><th>1x</th><td>6219530</td><td>11592929</td><td>17812459</td><td>178.1246</td><th>1x</th></tr><tr class=''><th class='c1'>Json.NET</th><td>2054</td><th>2.34x</th><td>22950215</td><td>53743535</td><td>76693750</td><td>766.9375</td><th>4.31x</th></tr><tr class=''><th class='c1'>ServiceStack Json</th><td>1955</td><th>2.22x</th><td>17175665</td><td>27454349</td><td>44630014</td><td>446.3001</td><th>2.51x</th></tr>
+</tbody>
+</table>
+</div>
+<h3>Results of serializing and deserializing CategoryDto 100,000 times</h3><table>
+<caption>* All times measured in ticks and payload size in bytes</caption><thead><tr><th>Serializer</th><th>Payload size</th><th>Larger than best</th><th>Serialization</th><th>Deserialization</th><th>Total</th><th>Avg per iteration</th><th>Slower than best</th></tr></thead>
+<tbody>
+<tr class='best-size best-time'><th class='c1'>ProtoBuf.net</th><td>58</td><th>1x</th><td>318963</td><td>1103813</td><td>1422776</td><td>14.2278</td><th>1x</th></tr><tr class=''><th class='c1'>Json.NET</th><td>95</td><th>1.64x</th><td>1291497</td><td>2640167</td><td>3931664</td><td>39.3166</td><th>2.76x</th></tr><tr class=''><th class='c1'>ServiceStack Json</th><td>95</td><th>1.64x</th><td>636380</td><td>818380</td><td>1454760</td><td>14.5476</td><th>1.02x</th></tr>
+</tbody>
+</table>
+<h3>Results of serializing and deserializing CustomerDto 100,000 times</h3><table>
+<caption>* All times measured in ticks and payload size in bytes</caption><thead><tr><th>Serializer</th><th>Payload size</th><th>Larger than best</th><th>Serialization</th><th>Deserialization</th><th>Total</th><th>Avg per iteration</th><th>Slower than best</th></tr></thead>
+<tbody>
+<tr class='best-size best-time'><th class='c1'>ProtoBuf.net</th><td>129</td><th>1x</th><td>957564</td><td>1934029</td><td>2891593</td><td>28.9159</td><th>1x</th></tr><tr class=''><th class='c1'>Json.NET</th><td>256</td><th>1.98x</th><td>1479683</td><td>5085946</td><td>6565629</td><td>65.6563</td><th>2.27x</th></tr><tr class=''><th class='c1'>ServiceStack Json</th><td>242</td><th>1.88x</th><td>1330931</td><td>2251262</td><td>3582193</td><td>35.8219</td><th>1.24x</th></tr>
+</tbody>
+</table>
+<h3>Results of serializing and deserializing EmployeeDto 100,000 times</h3><table>
+<caption>* All times measured in ticks and payload size in bytes</caption><thead><tr><th>Serializer</th><th>Payload size</th><th>Larger than best</th><th>Serialization</th><th>Deserialization</th><th>Total</th><th>Avg per iteration</th><th>Slower than best</th></tr></thead>
+<tbody>
+<tr class='best-size best-time'><th class='c1'>ProtoBuf.net</th><td>351</td><th>1x</th><td>1154973</td><td>2284985</td><td>3439958</td><td>34.3996</td><th>1x</th></tr><tr class=''><th class='c1'>Json.NET</th><td>594</td><th>1.69x</th><td>5533973</td><td>10771660</td><td>16305633</td><td>163.0563</td><th>4.74x</th></tr><tr class=''><th class='c1'>ServiceStack Json</th><td>594</td><th>1.69x</th><td>4923636</td><td>8302237</td><td>13225873</td><td>132.2587</td><th>3.84x</th></tr>
+</tbody>
+</table>
+<h3>Results of serializing and deserializing EmployeeTerritoryDto 100,000 times</h3><table>
+<caption>* All times measured in ticks and payload size in bytes</caption><thead><tr><th>Serializer</th><th>Payload size</th><th>Larger than best</th><th>Serialization</th><th>Deserialization</th><th>Total</th><th>Avg per iteration</th><th>Slower than best</th></tr></thead>
+<tbody>
+<tr class='best-size best-time'><th class='c1'>ProtoBuf.net</th><td>9</td><th>1x</th><td>338586</td><td>511984</td><td>850570</td><td>8.5057</td><th>1x</th></tr><tr class=''><th class='c1'>Json.NET</th><td>48</td><th>5.33x</th><td>792714</td><td>2156055</td><td>2948769</td><td>29.4877</td><th>3.47x</th></tr><tr class=''><th class='c1'>ServiceStack Json</th><td>38</td><th>4.22x</th><td>354871</td><td>702775</td><td>1057646</td><td>10.5765</td><th>1.24x</th></tr>
+</tbody>
+</table>
+<h3>Results of serializing and deserializing OrderDetailDto 100,000 times</h3><table>
+<caption>* All times measured in ticks and payload size in bytes</caption><thead><tr><th>Serializer</th><th>Payload size</th><th>Larger than best</th><th>Serialization</th><th>Deserialization</th><th>Total</th><th>Avg per iteration</th><th>Slower than best</th></tr></thead>
+<tbody>
+<tr class='best-size best-time'><th class='c1'>ProtoBuf.net</th><td>11</td><th>1x</th><td>292077</td><td>317809</td><td>609886</td><td>6.0989</td><th>1x</th></tr><tr class=''><th class='c1'>Json.NET</th><td>88</td><th>8x</th><td>1101530</td><td>4251876</td><td>5353406</td><td>53.5341</td><th>8.78x</th></tr><tr class=''><th class='c1'>ServiceStack Json</th><td>74</td><th>6.73x</th><td>838726</td><td>1516624</td><td>2355350</td><td>23.5535</td><th>3.86x</th></tr>
+</tbody>
+</table>
+<h3>Results of serializing and deserializing OrderDto 100,000 times</h3><table>
+<caption>* All times measured in ticks and payload size in bytes</caption><thead><tr><th>Serializer</th><th>Payload size</th><th>Larger than best</th><th>Serialization</th><th>Deserialization</th><th>Total</th><th>Avg per iteration</th><th>Slower than best</th></tr></thead>
+<tbody>
+<tr class='best-size best-time'><th class='c1'>ProtoBuf.net</th><td>108</td><th>1x</th><td>937217</td><td>1571176</td><td>2508393</td><td>25.0839</td><th>1x</th></tr><tr class=''><th class='c1'>Json.NET</th><td>366</td><th>3.39x</th><td>5277568</td><td>11686185</td><td>16963753</td><td>169.6375</td><th>6.76x</th></tr><tr class=''><th class='c1'>ServiceStack Json</th><td>348</td><th>3.22x</th><td>5215081</td><td>7887229</td><td>13102310</td><td>131.0231</td><th>5.22x</th></tr>
+</tbody>
+</table>
+<h3>Results of serializing and deserializing ProductDto 100,000 times</h3><table>
+<caption>* All times measured in ticks and payload size in bytes</caption><thead><tr><th>Serializer</th><th>Payload size</th><th>Larger than best</th><th>Serialization</th><th>Deserialization</th><th>Total</th><th>Avg per iteration</th><th>Slower than best</th></tr></thead>
+<tbody>
+<tr class='best-size best-time'><th class='c1'>ProtoBuf.net</th><td>40</td><th>1x</th><td>371926</td><td>841998</td><td>1213924</td><td>12.1392</td><th>1x</th></tr><tr class=''><th class='c1'>Json.NET</th><td>189</td><th>4.72x</th><td>2374855</td><td>4997597</td><td>7372452</td><td>73.7245</td><th>6.07x</th></tr><tr class=''><th class='c1'>ServiceStack Json</th><td>187</td><th>4.68x</th><td>1180662</td><td>2159103</td><td>3339765</td><td>33.3976</td><th>2.75x</th></tr>
+</tbody>
+</table>
+<h3>Results of serializing and deserializing RegionDto 100,000 times</h3><table>
+<caption>* All times measured in ticks and payload size in bytes</caption><thead><tr><th>Serializer</th><th>Payload size</th><th>Larger than best</th><th>Serialization</th><th>Deserialization</th><th>Total</th><th>Avg per iteration</th><th>Slower than best</th></tr></thead>
+<tbody>
+<tr class='best-size best-time'><th class='c1'>ProtoBuf.net</th><td>11</td><th>1x</th><td>275048</td><td>364969</td><td>640017</td><td>6.4002</td><th>1x</th></tr><tr class=''><th class='c1'>Json.NET</th><td>38</td><th>3.45x</th><td>497249</td><td>1704456</td><td>2201705</td><td>22.0170</td><th>3.44x</th></tr><tr class=''><th class='c1'>ServiceStack Json</th><td>38</td><th>3.45x</th><td>335898</td><td>459606</td><td>795504</td><td>7.9550</td><th>1.24x</th></tr>
+</tbody>
+</table>
+<h3>Results of serializing and deserializing ShipperDto 100,000 times</h3><table>
+<caption>* All times measured in ticks and payload size in bytes</caption><thead><tr><th>Serializer</th><th>Payload size</th><th>Larger than best</th><th>Serialization</th><th>Deserialization</th><th>Total</th><th>Avg per iteration</th><th>Slower than best</th></tr></thead>
+<tbody>
+<tr class='best-size best-time'><th class='c1'>ProtoBuf.net</th><td>34</td><th>1x</th><td>382787</td><td>504535</td><td>887322</td><td>8.8732</td><th>1x</th></tr><tr class=''><th class='c1'>Json.NET</th><td>64</td><th>1.88x</th><td>1282908</td><td>2671424</td><td>3954332</td><td>39.5433</td><th>4.46x</th></tr><tr class=''><th class='c1'>ServiceStack Json</th><td>64</td><th>1.88x</th><td>436344</td><td>566088</td><td>1002432</td><td>10.0243</td><th>1.13x</th></tr>
+</tbody>
+</table>
+<h3>Results of serializing and deserializing SupplierDto 100,000 times</h3><table>
+<caption>* All times measured in ticks and payload size in bytes</caption><thead><tr><th>Serializer</th><th>Payload size</th><th>Larger than best</th><th>Serialization</th><th>Deserialization</th><th>Total</th><th>Avg per iteration</th><th>Slower than best</th></tr></thead>
+<tbody>
+<tr class='best-size best-time'><th class='c1'>ProtoBuf.net</th><td>109</td><th>1x</th><td>647865</td><td>1463009</td><td>2110874</td><td>21.1087</td><th>1x</th></tr><tr class=''><th class='c1'>Json.NET</th><td>255</td><th>2.34x</th><td>2306884</td><td>5103443</td><td>7410327</td><td>74.1033</td><th>3.51x</th></tr><tr class=''><th class='c1'>ServiceStack Json</th><td>214</td><th>1.96x</th><td>1348622</td><td>1958495</td><td>3307117</td><td>33.0712</td><th>1.57x</th></tr>
+</tbody>
+</table>
+<h3>Results of serializing and deserializing TerritoryDto 100,000 times</h3><table>
+<caption>* All times measured in ticks and payload size in bytes</caption><thead><tr><th>Serializer</th><th>Payload size</th><th>Larger than best</th><th>Serialization</th><th>Deserialization</th><th>Total</th><th>Avg per iteration</th><th>Slower than best</th></tr></thead>
+<tbody>
+<tr class='best-size best-time'><th class='c1'>ProtoBuf.net</th><td>19</td><th>1x</th><td>542524</td><td>694622</td><td>1237146</td><td>12.3715</td><th>1x</th></tr><tr class=''><th class='c1'>Json.NET</th><td>61</td><th>3.21x</th><td>1011354</td><td>2674726</td><td>3686080</td><td>36.8608</td><th>2.98x</th></tr><tr class=''><th class='c1'>ServiceStack Json</th><td>61</td><th>3.21x</th><td>574514</td><td>832550</td><td>1407064</td><td>14.0706</td><th>1.14x</th></tr>
+</tbody>
+</table>
+</body>
+</html>
+

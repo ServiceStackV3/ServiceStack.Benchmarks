@@ -2,7 +2,6 @@ using System;
 using Northwind.Common.ComplexModel;
 using Northwind.Common.ServiceModel;
 using NUnit.Framework;
-using ServiceStack.Common.Extensions;
 using ServiceStack.Text;
 
 namespace Northwind.Benchmarks.Serialization

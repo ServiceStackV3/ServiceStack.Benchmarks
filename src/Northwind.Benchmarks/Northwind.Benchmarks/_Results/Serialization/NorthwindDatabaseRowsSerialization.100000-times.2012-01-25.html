@@ -1,0 +1,25 @@
+<html>
+<head>
+	<title>Serialization benchmark results</title>
+	<link href='default.css' rel='stylesheet' type='text/css' />
+</head>
+<body>
+
+<h2>Results of <span>NorthwindDatabaseRowsSerialization</span> benchmarks run at 1/25/2012</h2>
+<span class="summary">These benchmarks show the total time in ticks (1/1000ms) that it takes each serializer to serialize and deserialize the first row from each table in the  <a href='http://code.google.com/p/servicestack/source/browse/trunk/Common/Northwind.Benchmarks/Northwind.Common/DataModel/NorthwindData.cs'>Northwind Database</a><strong>100,000</strong> Times. <br/><br/>The full source code of the serialization benchmarks (which generated this report) is <a href='http://code.google.com/p/servicestack/source/browse/trunk/Common/Northwind.Benchmarks/Northwind.Benchmarks.Console/Program.cs'>available here</a>.</span><div id='combined'>
+<h3>Combined results of all benchmarks below</h3><table>
+<caption>* All times measured in ticks and payload size in bytes</caption><thead><tr><th>Serializer</th><th>Payload size</th><th>Larger than best</th><th>Serialization</th><th>Deserialization</th><th>Total</th><th>Avg per iteration</th><th>Slower than best</th></tr></thead>
+<tbody>
+<tr class='best-size best-time'><th class='c1'>ProtoBuf.net</th><td>183</td><th>1x</th><td>866650</td><td>1523310</td><td>2389960</td><td>23.8996</td><th>1x</th></tr><tr class=''><th class='c1'>Json.NET</th><td>406</td><th>2.22x</th><td>4034007</td><td>9497944</td><td>13531951</td><td>135.3195</td><th>5.66x</th></tr><tr class=''><th class='c1'>ServiceStack Json</th><td>412</td><th>2.25x</th><td>3603386</td><td>5127100</td><td>8730486</td><td>87.3049</td><th>3.65x</th></tr>
+</tbody>
+</table>
+</div>
+<h3>Results of serializing and deserializing Customer 100,000 times</h3><table>
+<caption>* All times measured in ticks and payload size in bytes</caption><thead><tr><th>Serializer</th><th>Payload size</th><th>Larger than best</th><th>Serialization</th><th>Deserialization</th><th>Total</th><th>Avg per iteration</th><th>Slower than best</th></tr></thead>
+<tbody>
+<tr class='best-size best-time'><th class='c1'>ProtoBuf.net</th><td>183</td><th>1x</th><td>866650</td><td>1523310</td><td>2389960</td><td>23.8996</td><th>1x</th></tr><tr class=''><th class='c1'>Json.NET</th><td>406</td><th>2.22x</th><td>4034007</td><td>9497944</td><td>13531951</td><td>135.3195</td><th>5.66x</th></tr><tr class=''><th class='c1'>ServiceStack Json</th><td>412</td><th>2.25x</th><td>3603386</td><td>5127100</td><td>8730486</td><td>87.3049</td><th>3.65x</th></tr>
+</tbody>
+</table>
+</body>
+</html>
+

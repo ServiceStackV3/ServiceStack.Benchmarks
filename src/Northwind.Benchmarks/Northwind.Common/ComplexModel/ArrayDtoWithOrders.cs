@@ -1,13 +1,11 @@
 using System;
 using System.Runtime.Serialization;
 using Northwind.Common.ServiceModel;
-using Platform.Text;
 using ProtoBuf;
 
 namespace Northwind.Common.ComplexModel
 {
 	[ProtoContract(ImplicitFields = ImplicitFields.AllPublic, InferTagFromName = true)]
-	[TextRecord]
 	[DataContract]
 	public class ArrayDtoWithOrders
 	{
@@ -16,19 +14,15 @@ namespace Northwind.Common.ComplexModel
 			Orders = new OrderDto[0];
 		}
 
-		[TextField]
 		[DataMember]
 		public Guid Id { get; set; }
 
-		[TextField]
 		[DataMember]
 		public CustomerDto Customer { get; set; }
 
-		[TextField]
 		[DataMember]
 		public SupplierDto Supplier { get; set; }
 
-		[TextField]
 		[DataMember]
 		public OrderDto[] Orders { get; set; }
 

@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Northwind.Common.DataModel;
 using NUnit.Framework;
+using ProtoBuf;
 
 namespace Northwind.Benchmarks.Serialization
 {
@@ -102,5 +105,135 @@ namespace Northwind.Benchmarks.Serialization
 			SerializeDto(NorthwindDtoData.Instance.Territories[0]);
 		}
 
+		[Test]
+		public void serialize_SimpleObject()
+		{
+			var dto = new SimpleObject { Id = 1, Name = "Name", Address = "Address", Scores = new[] { 1, 2, 3 } };
+			SerializeDto(dto);
+		}
+
+		[Test]
+		public void serialize_Customer()
+		{
+			var dto = CustomerFactory.CreateCustomers(1)[0];
+			SerializeDto(dto);
+		}
+
+		[ProtoContract(ImplicitFields = ImplicitFields.AllPublic, InferTagFromName = true)]
+		[DataContract]
+		public class SimpleObject
+		{
+			[DataMember]
+			public int Id { get; set; }
+
+			[DataMember]
+			public string Name { get; set; }
+
+			[DataMember]
+			public string Address { get; set; }
+
+			[DataMember]
+			public int[] Scores { get; set; }
+		}
+
+		public enum ShoppingIndexes
+		{
+			Level0 = 0,
+			Level1 = 10,
+			Level2 = 20,
+			Level3 = 30
+		}
+
+		[ProtoContract(ImplicitFields = ImplicitFields.AllPublic, InferTagFromName = true)]
+		[DataContract]
+		public class Customer
+		{
+			[DataMember]
+			public int Id { get; set; }
+
+			[DataMember]
+			public int CustomerNo { get; set; }
+
+			[DataMember]
+			public string Firstname { get; set; }
+
+			[DataMember]
+			public string Lastname { get; set; }
+
+			[DataMember]
+			public ShoppingIndexes ShoppingIndex { get; set; }
+
+			[DataMember]
+			public DateTime CustomerSince { get; set; }
+
+			[DataMember]
+			public Address BillingAddress { get; set; }
+
+			[DataMember]
+			public Address DeliveryAddress { get; set; }
+
+			public Customer()
+			{
+				ShoppingIndex = ShoppingIndexes.Level0;
+				BillingAddress = new Address();
+				DeliveryAddress = new Address();
+			}
+		}
+
+		[ProtoContract(ImplicitFields = ImplicitFields.AllPublic, InferTagFromName = true)]
+		[DataContract]
+		public class Address
+		{
+			[DataMember]
+			public string Street { get; set; }
+
+			[DataMember]
+			public string Zip { get; set; }
+
+			[DataMember]
+			public string City { get; set; }
+
+			[DataMember]
+			public string Country { get; set; }
+
+			[DataMember]
+			public int AreaCode { get; set; }
+		}
+
+		internal static class CustomerFactory
+		{
+			internal static IList<Customer> CreateCustomers(int numOfCustomers)
+			{
+				var customers = new List<Customer>();
+
+				for (var c = 0; c < numOfCustomers; c++)
+				{
+					var n = c + 1;
+					customers.Add(new Customer {
+						CustomerNo = n,
+						Firstname = "Daniel",
+						Lastname = "Wertheim",
+						ShoppingIndex = ShoppingIndexes.Level1,
+						CustomerSince = DateTime.Now,
+						BillingAddress = {
+							Street = "The billing street " + n,
+							Zip = "12345",
+							City = "The billing City",
+							Country = "Sweden-billing",
+							AreaCode = 1000 + n
+						},
+						DeliveryAddress = {
+							Street = "The delivery street #" + n,
+							Zip = "54321",
+							City = "The delivery City",
+							Country = "Sweden-delivery",
+							AreaCode = -1000 - n
+						}
+					});
+				}
+
+				return customers;
+			}
+		}
 	}
 }

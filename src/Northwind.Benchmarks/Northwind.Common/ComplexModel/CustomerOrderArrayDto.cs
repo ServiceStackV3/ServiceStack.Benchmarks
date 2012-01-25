@@ -1,12 +1,10 @@
 using System.Linq;
 using Northwind.Common.ServiceModel;
-using Platform.Text;
 using ProtoBuf;
 
 namespace Northwind.Common.ComplexModel
 {
 	[ProtoContract(ImplicitFields = ImplicitFields.AllPublic, InferTagFromName = true)]
-	[TextRecord]
 	public class CustomerOrderArrayDto
 	{
 		public CustomerOrderArrayDto()
@@ -14,10 +12,10 @@ namespace Northwind.Common.ComplexModel
 			this.Orders = new FullOrderDto[0];
 		}
 
-		[TextField]
+		[ProtoMember(1)]
 		public CustomerDto Customer { get; set; }
 
-		[TextField]
+		[ProtoMember(2)]
 		public FullOrderDto[] Orders { get; set; }
 
 		public override bool Equals(object obj)

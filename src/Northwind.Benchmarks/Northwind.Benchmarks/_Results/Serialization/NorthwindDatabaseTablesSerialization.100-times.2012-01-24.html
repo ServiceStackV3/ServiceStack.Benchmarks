@@ -1,0 +1,25 @@
+<html>
+<head>
+	<title>Serialization benchmark results</title>
+	<link href='default.css' rel='stylesheet' type='text/css' />
+</head>
+<body>
+
+<h2>Results of <span>NorthwindDatabaseTablesSerialization</span> benchmarks run at 1/24/2012</h2>
+<span class="summary">These benchmarks show the total time in ticks (1/1000ms) that it takes each serializer to serialize and deserialize each entire table from the  <a href='http://code.google.com/p/servicestack/source/browse/trunk/Common/Northwind.Benchmarks/Northwind.Common/DataModel/NorthwindData.cs'>Northwind Database</a> (3202 records) <strong>100</strong> Times. <br/><br/>The full source code of the serialization benchmarks (which generated this report) is <a href='http://code.google.com/p/servicestack/source/browse/trunk/Common/Northwind.Benchmarks/Northwind.Benchmarks.Console/Program.cs'>available here</a>.</span><div id='combined'>
+<h3>Combined results of all benchmarks below</h3><table>
+<caption>* All times measured in ticks and payload size in bytes</caption><thead><tr><th>Serializer</th><th>Payload size</th><th>Larger than best</th><th>Serialization</th><th>Deserialization</th><th>Total</th><th>Avg per iteration</th><th>Slower than best</th></tr></thead>
+<tbody>
+<tr class=''><th class='c1'>Json.NET</th><td>15449</td><th>1.01x</th><td>171871</td><td>302831</td><td>474702</td><td>4747.02</td><th>1.53x</th></tr><tr class='best-size best-time'><th class='c1'>ServiceStack Json</th><td>15365</td><th>1x</th><td>74091</td><td>235812</td><td>309903</td><td>3099.03</td><th>1x</th></tr>
+</tbody>
+</table>
+</div>
+<h3>Results of serializing and deserializing ProductDto 100 times</h3><table>
+<caption>* All times measured in ticks and payload size in bytes</caption><thead><tr><th>Serializer</th><th>Payload size</th><th>Larger than best</th><th>Serialization</th><th>Deserialization</th><th>Total</th><th>Avg per iteration</th><th>Slower than best</th></tr></thead>
+<tbody>
+<tr class=''><th class='c1'>Json.NET</th><td>15449</td><th>1.01x</th><td>171871</td><td>302831</td><td>474702</td><td>4747.02</td><th>1.53x</th></tr><tr class='best-size best-time'><th class='c1'>ServiceStack Json</th><td>15365</td><th>1x</th><td>74091</td><td>235812</td><td>309903</td><td>3099.03</td><th>1x</th></tr>
+</tbody>
+</table>
+</body>
+</html>
+
