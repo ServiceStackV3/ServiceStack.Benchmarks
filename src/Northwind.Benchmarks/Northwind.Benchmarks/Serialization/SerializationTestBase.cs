@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Script.Serialization;
 using LitJson;
+using MsgPack;
 using Newtonsoft.Json;
 using Northwind.Perf;
 using NUnit.Framework;
@@ -163,7 +164,7 @@ namespace Northwind.Benchmarks.Serialization
 		{
 			Log("Len: " + dtoString.Length + ", " + dtoString);
 		}
-		
+
 		public static byte[] ProtoBufToBytes<T>(T dto)
 		{
 			using (var ms = new MemoryStream())
@@ -189,6 +190,28 @@ namespace Northwind.Benchmarks.Serialization
 			Log("Len: " + bytes.Length + ", {protobuf bytes}");
 
 			return ProtoBufFromBytes<T>(bytes);
+		}
+
+		static CompiledPacker packer = new MsgPack.CompiledPacker(true);
+		//static ObjectPacker packer = new MsgPack.ObjectPacker();
+
+		public static byte[] MsgPackToBytes<T>(T dto)
+		{
+			return packer.Pack(dto);
+		}
+
+		public static T MsgPackFromBytes<T>(byte[] bytes)
+		{
+			return packer.Unpack<T>(bytes);
+		}
+
+		public T With_MsgPack<T>(T dto)
+		{
+			var bytes = MsgPackToBytes(dto);
+
+			Log("Len: " + bytes.Length + ", {MsgPack bytes}");
+
+			return MsgPackFromBytes<T>(bytes);
 		}
 
 		public T With_JsonNet<T>(T dto)
@@ -338,12 +361,6 @@ namespace Northwind.Benchmarks.Serialization
 					() => JsonUtils.SerializeJsonFx(dto),
 					() => JsonUtils.DeserializeJsonFx<T>(dtoJsonFx)
 				);
-
-				var dtoJsv = TypeSerializer.SerializeToString(dto);
-				RecordRunResults("ServiceStack Jsv", dtoJsv,
-					() => TypeSerializer.SerializeToString(dto),
-					() => TypeSerializer.DeserializeFromString<T>(dtoJsv)
-				);
 			}
 
 			var dtoProtoBuf = ProtoBufToBytes(dto);
@@ -351,6 +368,13 @@ namespace Northwind.Benchmarks.Serialization
 				() => ProtoBufToBytes(dto),
 				() => ProtoBufFromBytes<T>(dtoProtoBuf)
 			);
+
+			//Unstable, frequently throws errors
+			//var dtoMsgPack = MsgPackToBytes(dto);
+			//RecordRunResults("MsgPack", dtoMsgPack,
+			//    () => MsgPackToBytes(dto),
+			//    () => MsgPackFromBytes<T>(dtoMsgPack)
+			//);
 
 			var dtoJsonNet = Newtonsoft.Json.JsonConvert.SerializeObject(dto);
 			RecordRunResults("Json.NET", dtoJsonNet,
@@ -362,6 +386,12 @@ namespace Northwind.Benchmarks.Serialization
 			RecordRunResults("ServiceStack Json", dtoJson,
 				() => ServiceStack.Text.JsonSerializer.SerializeToString(dto),
 				() => ServiceStack.Text.JsonSerializer.DeserializeFromString<T>(dtoJson)
+			);
+
+			var dtoJsv = TypeSerializer.SerializeToString(dto);
+			RecordRunResults("ServiceStack Jsv", dtoJsv,
+				() => TypeSerializer.SerializeToString(dto),
+				() => TypeSerializer.DeserializeFromString<T>(dtoJsv)
 			);
 
 			CalculateBestTimes(TestResults);

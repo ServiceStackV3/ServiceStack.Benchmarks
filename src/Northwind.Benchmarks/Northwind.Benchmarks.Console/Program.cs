@@ -8,7 +8,7 @@ namespace Northwind.Benchmarks.Console
 		{
 			int noOfIterations;
 			if (args.Length < 1 || !int.TryParse(args[0], out noOfIterations))
-				noOfIterations = 1000;
+				noOfIterations = 10000;
 
 			Run_NorthwindDatabaseRowsSerialization(noOfIterations);
 			//Run_NorthwindDatabaseTablesSerialization(noOfIterations);
@@ -23,7 +23,6 @@ namespace Northwind.Benchmarks.Console
 			fixture.serialize_Employees();
 			fixture.serialize_EmployeeTerritories();
 			fixture.serialize_OrderDetails();
-			fixture.serialize_Orders();
 			fixture.serialize_Products();
 			fixture.serialize_Regions();
 			fixture.serialize_Shippers();
@@ -42,7 +41,6 @@ namespace Northwind.Benchmarks.Console
 			fixture.serialize_Employees();
 			fixture.serialize_EmployeeTerritories();
 			fixture.serialize_OrderDetails();
-			fixture.serialize_Orders();
 			fixture.serialize_Products();
 			fixture.serialize_Regions();
 			fixture.serialize_Shippers();

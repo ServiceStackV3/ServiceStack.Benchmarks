@@ -105,14 +105,14 @@ namespace Northwind.Benchmarks.Serialization
 			SerializeDto(NorthwindDtoData.Instance.Territories[0]);
 		}
 
-		[Test]
+		//[Test]
 		public void serialize_SimpleObject()
 		{
 			var dto = new SimpleObject { Id = 1, Name = "Name", Address = "Address", Scores = new[] { 1, 2, 3 } };
 			SerializeDto(dto);
 		}
 
-		[Test]
+		//[Test]
 		public void serialize_Customer()
 		{
 			var dto = CustomerFactory.CreateCustomers(1)[0];
