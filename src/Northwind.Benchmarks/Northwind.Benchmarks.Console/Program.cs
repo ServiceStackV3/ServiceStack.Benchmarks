@@ -8,7 +8,7 @@ namespace Northwind.Benchmarks.Console
 		{
 			int noOfIterations;
 			if (args.Length < 1 || !int.TryParse(args[0], out noOfIterations))
-				noOfIterations = 1000;
+				noOfIterations = 100000;
 
 			Run_NorthwindDatabaseRowsSerialization(noOfIterations);
 			//Run_NorthwindDatabaseTablesSerialization(noOfIterations);

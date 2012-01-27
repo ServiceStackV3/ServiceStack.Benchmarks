@@ -405,11 +405,12 @@ namespace Northwind.Benchmarks.Serialization
 					() => Utils.DeserializeBinaryFormatter<T>(msBytes)
 				);
 
-				var xaml = Utils.SerializeXaml(dto);
-				RecordRunResults("MS Xaml " + typeof(XamlServices).AssemblyVersion(), xaml,
-					() => Utils.SerializeXaml(dto),
-					() => Utils.DeserializeXaml<T>(xaml)
-				);
+				//1000x slower than ProtoBuf? WTF? I'm not waiting for this
+				//var xaml = Utils.SerializeXaml(dto);
+				//RecordRunResults("MS Xaml " + typeof(XamlServices).AssemblyVersion(), xaml,
+				//    () => Utils.SerializeXaml(dto),
+				//    () => Utils.DeserializeXaml<T>(xaml)
+				//);
 
 				var dtoJsonFx = Utils.SerializeJsonFx(dto);
 				RecordRunResults("JsonFx " + typeof(JsonFx.Json.JsonWriter).AssemblyVersion(), dtoJsonFx,
