@@ -97,6 +97,7 @@
     <Reference Include="System.Web.Extensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -108,7 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicPersistenceProviders\BasicPersistenceProviderScenarioBase.cs" />
-    <Compile Include="Serialization\JsonUtils.cs" />
+    <Compile Include="Serialization\Utils.cs" />
     <Compile Include="Serialization\NorthwindDatabaseRowsSerialization.cs" />
     <Compile Include="SerializersBenchmarkEntry.cs" />
     <Compile Include="Serialization\NorthwindDatabaseTablesSerialization.cs" />

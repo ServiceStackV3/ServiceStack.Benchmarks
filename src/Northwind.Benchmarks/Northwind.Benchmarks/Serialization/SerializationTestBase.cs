@@ -2,8 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Script.Serialization;
+using System.Xaml;
 using LitJson;
 using MsgPack;
 using Newtonsoft.Json;
@@ -282,23 +286,23 @@ namespace Northwind.Benchmarks.Serialization
 
 		public T With_DataContractSerializer<T>(T dto)
 		{
-			var dtoString = JsonUtils.SerializeDCS(dto);
+			var dtoString = Utils.SerializeDCS(dto);
 			LogDto(dtoString);
-			return JsonUtils.DeserializeDCS<T>(dtoString);
+			return Utils.DeserializeDCS<T>(dtoString);
 		}
 
 		public T With_DataContractJsonSerializer<T>(T dto)
 		{
-			var dtoString = JsonUtils.SerializeDCJS(dto);
+			var dtoString = Utils.SerializeDCJS(dto);
 			LogDto(dtoString);
-			return JsonUtils.DeserializeDCJS<T>(dtoString);
+			return Utils.DeserializeDCJS<T>(dtoString);
 		}
 
 		public T With_JsonFx<T>(T dto)
 		{
-			var dtoString = JsonUtils.SerializeJsonFx(dto);
+			var dtoString = Utils.SerializeJsonFx(dto);
 			LogDto(dtoString);
-			return JsonUtils.DeserializeJsonFx<T>(dtoString);
+			return Utils.DeserializeJsonFx<T>(dtoString);
 		}
 
 		protected void AssertEqual<T>(T dto, T originalDto)
@@ -354,7 +358,7 @@ namespace Northwind.Benchmarks.Serialization
 
 		protected void SerializeDto<T>(T dto)
 		{
-			OnlyRunServiceStackSerializers = true;
+			OnlyRunServiceStackSerializers = false;
 
 			TestResults = new List<SerializersBenchmarkEntry>();
 			FixtureTestResults.Add(TestResults);
@@ -365,29 +369,29 @@ namespace Northwind.Benchmarks.Serialization
 
 			if (!OnlyRunServiceStackSerializers)
 			{
-				var dtoMsXml = JsonUtils.SerializeDCS(dto);
-				RecordRunResults("MS DataContractSerializer", dtoMsXml,
-					() => JsonUtils.SerializeDCS(dto),
-					() => JsonUtils.DeserializeDCS<T>(dtoMsXml)
+				var dtoMsXml = Utils.SerializeDCS(dto);
+				RecordRunResults("MS DataContractSerializer " + typeof(DataContractSerializer).AssemblyVersion(), dtoMsXml,
+					() => Utils.SerializeDCS(dto),
+					() => Utils.DeserializeDCS<T>(dtoMsXml)
 				);
 
-				var dtoMsJson = JsonUtils.SerializeDCJS(dto);
-				RecordRunResults("MS JsonDataContractSerializer", dtoMsJson,
-					() => JsonUtils.SerializeDCJS(dto),
-					() => JsonUtils.DeserializeDCJS<T>(dtoMsJson)
+				var dtoMsJson = Utils.SerializeDCJS(dto);
+				RecordRunResults("MS JsonDataContractSerializer " + typeof(DataContractJsonSerializer).AssemblyVersion(), dtoMsJson,
+					() => Utils.SerializeDCJS(dto),
+					() => Utils.DeserializeDCJS<T>(dtoMsJson)
 				);
 
 				if (this.MultipleIterations.Sum() <= 10)
 				{
-					//To slow to include, up to 280x slower than ProtoBuf
+					//To slow to include, up to 280x slower than ProtoBuf - painful to wait for.
 					var js = new JavaScriptSerializer();
 					var dtoJs = js.Serialize(dto);
-					RecordRunResults("Microsoft JavaScriptSerializer", dtoJs,
+					RecordRunResults("MS JavaScriptSerializer " + typeof(JavaScriptSerializer).AssemblyVersion(), dtoJs,
 						() => js.Serialize(dto),
 						() => js.Deserialize<T>(dtoJs)
 					);
 
-					//Can't import complex types, e.g. Lists, etc
+					//Doesn't handle complex types, e.g. Lists, etc - and its Slow?!
 					//var jayRockString = Jayrock.Json.Conversion.JsonConvert.ExportToString(dto);
 					//RecordRunResults("JayRock JsonConvert", jayRockString,
 					//    () => Jayrock.Json.Conversion.JsonConvert.ExportToString(dto),
@@ -395,46 +399,52 @@ namespace Northwind.Benchmarks.Serialization
 					//);
 				}
 
-				//var msBytes = BinaryFormatterSerializer.Instance.Serialize(dto);
-				//RecordRunResults("Microsoft BinaryFormatter", msBytes,
-				//    () => BinaryFormatterSerializer.Instance.Serialize(dto),
-				//    () => BinaryFormatterDeserializer.Instance.Deserialize<T>(msBytes)
+				var msBytes = Utils.SerializeBinaryFormatter(dto);
+				RecordRunResults("MS BinaryFormatter " + typeof(BinaryFormatter).AssemblyVersion(), msBytes,
+					() => Utils.SerializeBinaryFormatter(dto),
+					() => Utils.DeserializeBinaryFormatter<T>(msBytes)
+				);
+
+				var xaml = Utils.SerializeXaml(dto);
+				RecordRunResults("MS Xaml " + typeof(XamlServices).AssemblyVersion(), xaml,
+					() => Utils.SerializeXaml(dto),
+					() => Utils.DeserializeXaml<T>(xaml)
+				);
+
+				var dtoJsonFx = Utils.SerializeJsonFx(dto);
+				RecordRunResults("JsonFx " + typeof(JsonFx.Json.JsonWriter).AssemblyVersion(), dtoJsonFx,
+					() => Utils.SerializeJsonFx(dto),
+					() => Utils.DeserializeJsonFx<T>(dtoJsonFx)
+				);
+
+				var dtoProtoBuf = ProtoBufToBytes(dto);
+				RecordRunResults("ProtoBuf.net " + typeof(ProtoBuf.Serializer).AssemblyVersion(), dtoProtoBuf,
+					() => ProtoBufToBytes(dto),
+					() => ProtoBufFromBytes<T>(dtoProtoBuf)
+				);
+
+				//Unstable, frequently throws errors
+				//var dtoMsgPack = MsgPackToBytes(dto);
+				//RecordRunResults("MsgPack", dtoMsgPack,
+				//    () => MsgPackToBytes(dto),
+				//    () => MsgPackFromBytes<T>(dtoMsgPack)
 				//);
 
-				var dtoJsonFx = JsonUtils.SerializeJsonFx(dto);
-				RecordRunResults("JsonFx", dtoJsonFx,
-					() => JsonUtils.SerializeJsonFx(dto),
-					() => JsonUtils.DeserializeJsonFx<T>(dtoJsonFx)
+				var dtoJsonNet = Newtonsoft.Json.JsonConvert.SerializeObject(dto);
+				RecordRunResults("JSON .NET " + typeof(Newtonsoft.Json.JsonConvert).AssemblyVersion(), dtoJsonNet,
+					() => Newtonsoft.Json.JsonConvert.SerializeObject(dto),
+					() => Newtonsoft.Json.JsonConvert.DeserializeObject<T>(dtoJsonNet)
 				);
 			}
 
-			var dtoProtoBuf = ProtoBufToBytes(dto);
-			RecordRunResults("ProtoBuf.net", dtoProtoBuf,
-				() => ProtoBufToBytes(dto),
-				() => ProtoBufFromBytes<T>(dtoProtoBuf)
-			);
-
-			//Unstable, frequently throws errors
-			//var dtoMsgPack = MsgPackToBytes(dto);
-			//RecordRunResults("MsgPack", dtoMsgPack,
-			//    () => MsgPackToBytes(dto),
-			//    () => MsgPackFromBytes<T>(dtoMsgPack)
-			//);
-
-			var dtoJsonNet = Newtonsoft.Json.JsonConvert.SerializeObject(dto);
-			RecordRunResults("Json.NET", dtoJsonNet,
-				() => Newtonsoft.Json.JsonConvert.SerializeObject(dto),
-				() => Newtonsoft.Json.JsonConvert.DeserializeObject<T>(dtoJsonNet)
-			);
-
 			var dtoJson = ServiceStack.Text.JsonSerializer.SerializeToString(dto);
-			RecordRunResults("ServiceStack Json", dtoJson,
+			RecordRunResults("ServiceStack Json " + typeof(ServiceStack.Text.JsonSerializer).AssemblyVersion(), dtoJson,
 				() => ServiceStack.Text.JsonSerializer.SerializeToString(dto),
 				() => ServiceStack.Text.JsonSerializer.DeserializeFromString<T>(dtoJson)
 			);
 
 			var dtoJsv = TypeSerializer.SerializeToString(dto);
-			RecordRunResults("ServiceStack Jsv", dtoJsv,
+			RecordRunResults("ServiceStack Jsv " + typeof(ServiceStack.Text.TypeSerializer).AssemblyVersion(), dtoJsv,
 				() => TypeSerializer.SerializeToString(dto),
 				() => TypeSerializer.DeserializeFromString<T>(dtoJsv)
 			);

@@ -1,17 +1,26 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Xaml;
 using System.Xml;
 using JsonFx.Serialization;
 using JsonFx.Serialization.Resolvers;
+using ServiceStack.Text;
 using SerializationException = System.Runtime.Serialization.SerializationException;
 
 namespace Northwind.Benchmarks.Serialization
 {
-	public static class JsonUtils
+	public static class Utils
 	{
+		public static string AssemblyVersion(this Type type)
+		{
+			var version = type.Assembly.GetName().Version;
+			return " - v{0}.{1}.{2}".Fmt(version.Major, version.MajorRevision, version.Minor);
+		}
+
 		public static void Times(this int times, Action<int> actionFn)
 		{
 			for (var i = 0; i < times; i++)
@@ -27,6 +36,80 @@ namespace Northwind.Benchmarks.Serialization
 				actionFn();
 			}
 		}
+
+		private static readonly BinaryFormatter formatter = new BinaryFormatter();
+		public static byte[] SerializeBinaryFormatter<T>(T from)
+		{
+			try
+			{
+				using (var ms = new MemoryStream())
+				{
+					formatter.Serialize(ms, from);
+					ms.Flush();
+					return ms.ToArray();
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new SerializationException(string.Format("Error serializing object of type {0}", from.GetType().FullName), ex);
+			}
+		}
+
+		public static To DeserializeBinaryFormatter<To>(byte[] bytes)
+		{
+			var type = typeof(To);
+			return (To)DeserializeBinaryFormatter(bytes, type);
+		}
+
+		public static object DeserializeBinaryFormatter(byte[] bytes, Type type)
+		{
+			try
+			{
+				if (bytes == null) throw new ArgumentNullException("bytes");
+
+				using (var ms = new MemoryStream(bytes))
+				{
+					var obj = formatter.Deserialize(ms);
+					return obj;
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new SerializationException("BinaryFormatterDeserializer: Error converting type: " + ex.Message, ex);
+			}
+		}
+
+		public static string SerializeXaml<T>(T from)
+		{
+			try
+			{
+				using (var sw = new StringWriter())
+				{
+					XamlServices.Save(sw, from);
+					return sw.ToString();
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new SerializationException(string.Format("Error serializing object of type {0}", from.GetType().FullName), ex);
+			}
+		}
+
+		public static T DeserializeXaml<T>(string from)
+		{
+			try
+			{
+				using (var sw = new StringReader(from))
+				{
+					return (T) XamlServices.Load(sw);
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new SerializationException(string.Format("Error serializing object of type {0}", from.GetType().FullName), ex);
+			}
+		}
+
 
 		public static T DeserializeDCS<T>(string xml)
 		{
