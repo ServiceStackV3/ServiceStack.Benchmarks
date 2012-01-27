@@ -58,7 +58,7 @@ namespace Northwind.Benchmarks.Serialization
 
 			foreach (var fixtureTestResult in FixtureTestResults)
 			{
-				WriteTable(sb, fixtureTestResult, 
+				WriteTable(sb, fixtureTestResult,
 					"<h3>Results of serializing and deserializing {0} {1} times</h3>");
 			}
 
@@ -76,8 +76,8 @@ namespace Northwind.Benchmarks.Serialization
 			{
 				if (testResultCount++ == 0)
 				{
-					sb.AppendFormat(benchmarkTitleHtml, 
-						benchmarkEntry.ModelName, 
+					sb.AppendFormat(benchmarkTitleHtml,
+						benchmarkEntry.ModelName,
 						benchmarkEntry.Iterations.ToString("#,##0"));
 
 					sb.AppendFormat("<table>\n<caption>* All times measured in ticks and payload size in bytes</caption>");
@@ -119,44 +119,89 @@ namespace Northwind.Benchmarks.Serialization
 			sb.AppendLine("\n</tbody>\n</table>");
 		}
 
-		private static List<SerializersBenchmarkEntry> GetCombinedResults(
+
+		private static void WriteTable(
+			StringBuilder sb,
+			IEnumerable<CombinedSerializersBenchmarkEntry> fixtureTestResult, string benchmarkTitleHtml)
+		{
+			var testResultCount = 0;
+
+			foreach (var benchmarkEntry in fixtureTestResult)
+			{
+				if (testResultCount++ == 0)
+				{
+					sb.AppendFormat(benchmarkTitleHtml,
+						benchmarkEntry.ModelName,
+						benchmarkEntry.Iterations.ToString("#,##0"));
+
+					sb.AppendFormat("<div style='margin-left:200px'><table>\n<caption>* Avg times based on all benchmarks below</caption>");
+					sb.AppendFormat(
+						"<thead><tr><th>{0}</th><th>{1}</th><th>{2}</th><th>{3}</th><th>{4}</th></tr></thead>",
+						"Serializer",
+						"Larger than best",
+						"Serialization",
+						"Deserialization",
+						"Slower than best"
+					);
+					sb.AppendLine("\n<tbody>");
+				}
+
+				var trClass = "";
+				if (!benchmarkEntry.Success)
+					trClass += "failed ";
+				if (benchmarkEntry.TimesLargerThanBest == 1)
+					trClass += "best-size ";
+				if (benchmarkEntry.TimesSlowerThanBest == 1)
+					trClass += "best-time ";
+
+				sb.AppendFormat(
+					"<tr class='{5}'><th class='c1'>{0}</th><td>{1}x</td><th>{2}x</th><td>{3}x</td><td>{4}x</td></tr>",
+					benchmarkEntry.SerializerName,
+					benchmarkEntry.TimesLargerThanBest,
+					benchmarkEntry.TimesSerializationSlowerThanBest,
+					benchmarkEntry.TimesDeserializationSlowerThanBest,
+					benchmarkEntry.TimesSlowerThanBest,
+					trClass.TrimEnd()
+				);
+			}
+			sb.AppendLine("\n</tbody>\n</table></div>");
+		}
+
+		private static IEnumerable<CombinedSerializersBenchmarkEntry> GetCombinedResults(
 			IEnumerable<List<SerializersBenchmarkEntry>> textFixtureResults)
 		{
-			var combinedBenchmarksMap = new Dictionary<string, SerializersBenchmarkEntry>();
+			var combinedBenchmarksMap = new Dictionary<string, CombinedSerializersBenchmarkEntry>();
 			var orderedList = new List<string>();
 
-			foreach (var benchmarkEntries in textFixtureResults)
+			var successfulEntries = textFixtureResults.Where(benchmarkEntries => benchmarkEntries.All(x => x.Success))
+				.SelectMany(benchmarkEntries => benchmarkEntries).ToList();
+
+			foreach (var benchmarkEntry in successfulEntries)
 			{
-				var skipIfOneSerializerFailed = benchmarkEntries.Any(x => !x.Success);
-				if (skipIfOneSerializerFailed) continue;
-
-				foreach (var benchmarkEntry in benchmarkEntries)
+				CombinedSerializersBenchmarkEntry combinedEntry;
+				if (!combinedBenchmarksMap.TryGetValue(benchmarkEntry.SerializerName, out combinedEntry))
 				{
-					SerializersBenchmarkEntry combinedEntry;
-					if (!combinedBenchmarksMap.TryGetValue(benchmarkEntry.SerializerName, out combinedEntry))
-					{
-						orderedList.Add(benchmarkEntry.SerializerName);
-						combinedEntry = new SerializersBenchmarkEntry {
-							Iterations = benchmarkEntry.Iterations,
-							SerializerName = benchmarkEntry.SerializerName,
-							ModelName = "All Models"
-						};
-						combinedBenchmarksMap[combinedEntry.SerializerName] = combinedEntry;
-					}
-
-					combinedEntry.SerializedBytesLength += benchmarkEntry.SerializedBytesLength;
-					combinedEntry.TotalSerializationTicks += benchmarkEntry.TotalSerializationTicks;
-					combinedEntry.TotalDeserializationTicks += benchmarkEntry.TotalDeserializationTicks;
+					orderedList.Add(benchmarkEntry.SerializerName);
+					combinedEntry = new CombinedSerializersBenchmarkEntry {
+						Iterations = benchmarkEntry.Iterations,
+						SerializerName = benchmarkEntry.SerializerName,
+						ModelName = "All Models"
+					};
+					combinedBenchmarksMap[combinedEntry.SerializerName] = combinedEntry;
 				}
+
+				combinedEntry.SerializedBytesLength += benchmarkEntry.SerializedBytesLength * 1 / successfulEntries.Count;
+				combinedEntry.TotalSerializationTicks += benchmarkEntry.TotalSerializationTicks * 1 / successfulEntries.Count;
+				combinedEntry.TotalDeserializationTicks += benchmarkEntry.TotalDeserializationTicks * 1 / successfulEntries.Count;
 			}
 
-			var orderedCombinedBenchmarks = new List<SerializersBenchmarkEntry>();
+			var orderedCombinedBenchmarks = new List<CombinedSerializersBenchmarkEntry>();
 			foreach (var serializerName in orderedList)
 			{
 				orderedCombinedBenchmarks.Add(combinedBenchmarksMap[serializerName]);
 			}
 
-			CalculateBestTimes(orderedCombinedBenchmarks);
+			CalculateBestTimesCombined(orderedCombinedBenchmarks);
 			return orderedCombinedBenchmarks;
 		}
 
@@ -355,7 +400,7 @@ namespace Northwind.Benchmarks.Serialization
 				//    () => BinaryFormatterSerializer.Instance.Serialize(dto),
 				//    () => BinaryFormatterDeserializer.Instance.Deserialize<T>(msBytes)
 				//);
-				
+
 				var dtoJsonFx = JsonUtils.SerializeJsonFx(dto);
 				RecordRunResults("JsonFx", dtoJsonFx,
 					() => JsonUtils.SerializeJsonFx(dto),
@@ -397,6 +442,19 @@ namespace Northwind.Benchmarks.Serialization
 			CalculateBestTimes(TestResults);
 		}
 
+		private static void CalculateBestTimesCombined(List<CombinedSerializersBenchmarkEntry> testResults)
+		{
+			CalculateBestTimes(testResults);
+
+			var smallestSerializationTime = testResults.Min(x => x.TotalSerializationTicks);
+			testResults.ForEach(x =>
+				x.TimesSerializationSlowerThanBest = Math.Round(x.TotalSerializationTicks / (decimal)smallestSerializationTime, 2));
+
+			var smallestDeserializationTime = testResults.Min(x => x.TotalDeserializationTicks);
+			testResults.ForEach(x =>
+				x.TimesDeserializationSlowerThanBest = Math.Round(x.TotalDeserializationTicks / (decimal)smallestDeserializationTime, 2));
+		}
+
 		private static void CalculateBestTimes(IEnumerable<SerializersBenchmarkEntry> testResultEntries)
 		{
 			try
@@ -407,13 +465,11 @@ namespace Northwind.Benchmarks.Serialization
 
 				if (modelsWithAtLeastOneFailedToSerialise) return;
 
-				var smallestTime = testResults.ConvertAll(x => x.TotalTicks).Min();
-
-				var smallestSize = testResults.ConvertAll(x => x.SerializedBytesLength).Min();
-
+				var smallestTime = testResults.Min(x => x.TotalTicks);
 				testResults.ForEach(x =>
 					x.TimesSlowerThanBest = Math.Round(x.TotalTicks / (decimal)smallestTime, 2));
 
+				var smallestSize = testResults.Min(x => x.SerializedBytesLength);
 				testResults.ForEach(x =>
 					x.TimesLargerThanBest = Math.Round(x.SerializedBytesLength / (decimal)smallestSize, 2));
 			}

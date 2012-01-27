@@ -44,4 +44,10 @@ namespace Northwind.Benchmarks
 		public decimal TimesSlowerThanBest { get; set; }
 		public decimal TimesLargerThanBest { get; set; }
 	}
+
+	public class CombinedSerializersBenchmarkEntry : SerializersBenchmarkEntry
+	{
+		public decimal TimesSerializationSlowerThanBest { get; set; }
+		public decimal TimesDeserializationSlowerThanBest { get; set; }
+	}
 }
