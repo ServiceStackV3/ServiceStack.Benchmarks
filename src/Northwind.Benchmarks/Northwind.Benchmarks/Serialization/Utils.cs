@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -17,8 +19,11 @@ namespace Northwind.Benchmarks.Serialization
 	{
 		public static string AssemblyVersion(this Type type)
 		{
-			var version = type.Assembly.GetName().Version;
-			return " - v{0}.{1}.{2}".Fmt(version.Major, version.MajorRevision, version.Minor);
+			var version = FileVersionInfo.GetVersionInfo(type.Assembly.Location);
+			return " - v{0}.{1}.{2}".Fmt(version.FileMajorPart, version.FileMinorPart, version.FileBuildPart.ToString(CultureInfo.InvariantCulture)[0]);
+			
+			//var version = type.Assembly.GetName().Version;
+			//return " - v{0}.{1}.{2}".Fmt(version.Major, version.MajorRevision, version.Minor);
 		}
 
 		public static void Times(this int times, Action<int> actionFn)
