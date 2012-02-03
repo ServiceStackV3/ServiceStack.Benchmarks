@@ -31,10 +31,10 @@ namespace Northwind.Benchmarks.Serialization
 			var htmlSummary =
 				"These benchmarks show the total time in ticks (1/1000ms) that it takes"
 			  + " each serializer to serialize and deserialize the first row from each table in the "
-			  + " <a href='http://code.google.com/p/servicestack/source/browse/trunk/Common/Northwind.Benchmarks/Northwind.Common/DataModel/NorthwindData.cs'>Northwind Database </a> "
+              + " <a href='https://github.com/ServiceStack/ServiceStack.Benchmarks/blob/master/tests/ServiceStack.Northwind.Tests/Support/NorthwindData.cs'>Northwind Database </a> "
 			  + "<strong>" + this.MultipleIterations.Sum().ToString("#,##0") + "</strong> Times. <br/><br/>"
 			  + "The full source code of the serialization benchmarks (which generated this report)"
-			  + " is <a href='http://code.google.com/p/servicestack/source/browse/trunk/Common/Northwind.Benchmarks/Northwind.Benchmarks.Console/Program.cs'>available here</a>.";
+              + " is <a href='https://github.com/ServiceStack/ServiceStack.Benchmarks/blob/master/src/Northwind.Benchmarks/Northwind.Benchmarks.Console/Program.cs'>available here</a>.";
 
 			base.GenerateHtmlReport(htmlSummary);
 		}

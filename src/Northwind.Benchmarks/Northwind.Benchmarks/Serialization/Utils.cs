@@ -115,53 +115,89 @@ namespace Northwind.Benchmarks.Serialization
 			}
 		}
 
+        public static T DeserializeXmlSerializer<T>(string xml)
+        {
+            var type = typeof(T);
+            return (T)DeserializeXmlSerializer(xml, type);
+        }
 
-		public static T DeserializeDCS<T>(string xml)
-		{
-			var type = typeof(T);
-			return (T)DeserializeDCS(xml, type);
-		}
+        public static object DeserializeXmlSerializer(string xml, Type type)
+        {
+            try
+            {
+                using (var reader = new StringReader(xml))
+                {
+                    var serializer = new System.Xml.Serialization.XmlSerializer(type);
+                    return serializer.Deserialize(reader);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException("XmlSerializer: Error converting type: " + ex.Message, ex);
+            }
+        }
 
-		public static object DeserializeDCS(string xml, Type type)
-		{
-			try
-			{
-				var bytes = Encoding.UTF8.GetBytes(xml);
+        public static string SerializeXmlSerializer<T>(T from)
+        {
+            try
+            {
+                using (var writer = new StringWriter())
+                {
+                    var serializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
+                    serializer.Serialize(writer, from);
+                    return writer.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException(string.Format("XmlSerializer: Error serializing object of type {0}", from.GetType().FullName), ex);
+            }
+        }
 
-				using (var reader = XmlDictionaryReader.CreateTextReader(bytes, new XmlDictionaryReaderQuotas()))
-				{
-					var serializer = new DataContractSerializer(type);
-					return serializer.ReadObject(reader);
-				}
-			}
-			catch (Exception ex)
-			{
-				throw new SerializationException("DeserializeDataContract: Error converting type: " + ex.Message, ex);
-			}
-		}
+        public static T DeserializeDCS<T>(string xml)
+        {
+            var type = typeof(T);
+            return (T)DeserializeDCS(xml, type);
+        }
 
-		public static string SerializeDCS<T>(T from)
-		{
-			try
-			{
-				using (var ms = new MemoryStream())
-				{
-					using (var xw = XmlWriter.Create(ms))
-					{
-						var serializer = new DataContractSerializer(from.GetType());
-						serializer.WriteObject(xw, from);
-						xw.Flush();
-						ms.Seek(0, SeekOrigin.Begin);
-						var reader = new StreamReader(ms);
-						return reader.ReadToEnd();
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				throw new SerializationException(string.Format("Error serializing object of type {0}", from.GetType().FullName), ex);
-			}
-		}
+        public static object DeserializeDCS(string xml, Type type)
+        {
+            try
+            {
+                var bytes = Encoding.UTF8.GetBytes(xml);
+
+                using (var reader = XmlDictionaryReader.CreateTextReader(bytes, new XmlDictionaryReaderQuotas()))
+                {
+                    var serializer = new DataContractSerializer(type);
+                    return serializer.ReadObject(reader);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException("DeserializeDataContract: Error converting type: " + ex.Message, ex);
+            }
+        }
+
+        public static string SerializeDCS<T>(T from)
+        {
+            try
+            {
+                using (var ms = new MemoryStream())
+                using (var xw = XmlWriter.Create(ms))
+                {
+                    var serializer = new DataContractSerializer(from.GetType());
+                    serializer.WriteObject(xw, from);
+                    xw.Flush();
+                    ms.Seek(0, SeekOrigin.Begin);
+                    var reader = new StreamReader(ms);
+                    return reader.ReadToEnd();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException(string.Format("SerializeDCS: Error serializing object of type {0}", from.GetType().FullName), ex);
+            }
+        }
 
 		public static object DeserializeDCJS(string json, Type returnType)
 		{
@@ -178,7 +214,7 @@ namespace Northwind.Benchmarks.Serialization
 			}
 			catch (Exception ex)
 			{
-				throw new SerializationException("JsonDataContractDeserializer: Error converting to type: " + ex.Message, ex);
+                throw new SerializationException("DeserializeDCJS: Error converting to type: " + ex.Message, ex);
 			}
 		}
 
@@ -206,24 +242,47 @@ namespace Northwind.Benchmarks.Serialization
 			}
 			catch (Exception ex)
 			{
-				throw new SerializationException("JsonDataContractSerializer: Error converting type: " + ex.Message, ex);
+                throw new SerializationException("SerializeDCJS: Error converting type: " + ex.Message, ex);
 			}
 		}
 
 		private static readonly DataReaderSettings JsonFxReaderSettings = new DataReaderSettings(new DataContractResolverStrategy());
 		private static readonly DataWriterSettings JsonFxWriterSettings = new DataWriterSettings(new DataContractResolverStrategy());
 
-		public static T DeserializeJsonFx<T>(string json)
-		{
-			var reader = new JsonFx.Json.JsonReader(JsonFxReaderSettings);
-			return reader.Read<T>(json);
-		}
+        public static T DeserializeJsonFx<T>(string json)
+        {
+            var reader = new JsonFx.Json.JsonReader(JsonFxReaderSettings);
+            return reader.Read<T>(json);
+        }
 
-		public static string SerializeJsonFx<T>(T obj)
-		{
-			var writer = new JsonFx.Json.JsonWriter(JsonFxWriterSettings);
-			return writer.Write(obj);
-		}
+        public static string SerializeJsonFx<T>(T obj)
+        {
+            var writer = new JsonFx.Json.JsonWriter(JsonFxWriterSettings);
+            return writer.Write(obj);
+        }
+
+        //http://james.newtonking.com/archive/2009/12/26/json-net-3-5-release-6-binary-json-bson-support.aspx
+        public static T DeserializeJsonNetBson<T>(byte[] bson)
+        {
+            using (var ms = new MemoryStream(bson))
+            {
+                var serializer = new Newtonsoft.Json.JsonSerializer();
+                var reader = new Newtonsoft.Json.Bson.BsonReader(ms);
+                return serializer.Deserialize<T>(reader);
+            }
+        }
+
+        public static byte[] SerializeJsonNetBson<T>(T obj)
+        {
+            using (var ms = new MemoryStream())
+            {
+                var serializer = new Newtonsoft.Json.JsonSerializer();
+                var writer = new Newtonsoft.Json.Bson.BsonWriter(ms);
+                serializer.Serialize(writer, obj);
+                var bytes = ms.ToArray();
+                return bytes;
+            }
+        }
 		 
 	}
 }

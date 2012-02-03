@@ -375,11 +375,17 @@ namespace Northwind.Benchmarks.Serialization
 					() => Utils.DeserializeDCS<T>(dtoMsXml)
 				);
 
-				var dtoMsJson = Utils.SerializeDCJS(dto);
-				RecordRunResults("MS JsonDataContractSerializer " + typeof(DataContractJsonSerializer).AssemblyVersion(), dtoMsJson,
-					() => Utils.SerializeDCJS(dto),
-					() => Utils.DeserializeDCJS<T>(dtoMsJson)
-				);
+                var dtoMsJson = Utils.SerializeDCJS(dto);
+                RecordRunResults("MS JsonDataContractSerializer " + typeof(DataContractJsonSerializer).AssemblyVersion(), dtoMsJson,
+                    () => Utils.SerializeDCJS(dto),
+                    () => Utils.DeserializeDCJS<T>(dtoMsJson)
+                );
+
+                var dtoMsXmlSerializer = Utils.SerializeXmlSerializer(dto);
+                RecordRunResults("MS XmlSerializer " + typeof(System.Xml.Serialization.XmlSerializer).AssemblyVersion(), dtoMsXmlSerializer,
+                    () => Utils.SerializeXmlSerializer(dto),
+                    () => Utils.DeserializeXmlSerializer<T>(dtoMsXmlSerializer)
+                );
 
 				if (this.MultipleIterations.Sum() <= 10)
 				{
@@ -431,12 +437,18 @@ namespace Northwind.Benchmarks.Serialization
 				//    () => MsgPackFromBytes<T>(dtoMsgPack)
 				//);
 
-				var dtoJsonNet = Newtonsoft.Json.JsonConvert.SerializeObject(dto);
-				RecordRunResults("JSON .NET " + typeof(Newtonsoft.Json.JsonConvert).AssemblyVersion(), dtoJsonNet,
-					() => Newtonsoft.Json.JsonConvert.SerializeObject(dto),
-					() => Newtonsoft.Json.JsonConvert.DeserializeObject<T>(dtoJsonNet)
-				);
-			}
+                var dtoJsonNet = Newtonsoft.Json.JsonConvert.SerializeObject(dto);
+                RecordRunResults("JSON .NET " + typeof(Newtonsoft.Json.JsonConvert).AssemblyVersion(), dtoJsonNet,
+                    () => Newtonsoft.Json.JsonConvert.SerializeObject(dto),
+                    () => Newtonsoft.Json.JsonConvert.DeserializeObject<T>(dtoJsonNet)
+                );
+
+                var bsonJsonNet = Utils.SerializeJsonNetBson(dto);
+                RecordRunResults("JSON .NET BSON " + typeof(Newtonsoft.Json.Bson.BsonWriter).AssemblyVersion(), bsonJsonNet,
+                    () => Utils.SerializeJsonNetBson(dto),
+                    () => Utils.DeserializeJsonNetBson<T>(bsonJsonNet)
+                );
+            }
 
 			var dtoJson = ServiceStack.Text.JsonSerializer.SerializeToString(dto);
 			RecordRunResults("ServiceStack Json " + typeof(ServiceStack.Text.JsonSerializer).AssemblyVersion(), dtoJson,
