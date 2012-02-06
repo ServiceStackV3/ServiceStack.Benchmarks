@@ -206,7 +206,7 @@ namespace Northwind.Common.DataModel
 		public string CustomerId { get; set; }
 
 		[Index]
-		[References(typeof(Customer))]
+		[References(typeof(Employee))]
 		[Alias("EmployeeID")]
 		public int EmployeeId { get; set; }
 
