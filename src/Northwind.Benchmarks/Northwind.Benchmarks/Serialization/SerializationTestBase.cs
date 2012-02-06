@@ -375,6 +375,12 @@ namespace Northwind.Benchmarks.Serialization
 					() => Utils.DeserializeDCS<T>(dtoMsXml)
 				);
 
+                var dtoMsNetXml = Utils.SerializeNetDCS(dto);
+                RecordRunResults("MS NetDataContractSerializer " + typeof(NetDataContractSerializer).AssemblyVersion(), dtoMsNetXml,
+                    () => Utils.SerializeNetDCS(dto),
+                    () => Utils.DeserializeNetDCS<T>(dtoMsNetXml)
+                );
+
                 var dtoMsJson = Utils.SerializeDCJS(dto);
                 RecordRunResults("MS JsonDataContractSerializer " + typeof(DataContractJsonSerializer).AssemblyVersion(), dtoMsJson,
                     () => Utils.SerializeDCJS(dto),
