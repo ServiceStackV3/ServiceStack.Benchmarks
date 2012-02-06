@@ -291,6 +291,13 @@ namespace Northwind.Benchmarks.Serialization
 			return Utils.DeserializeDCS<T>(dtoString);
 		}
 
+        public T With_NetDataContractSerializer<T>(T dto)
+        {
+            var dtoString = Utils.SerializeNetDCS(dto);
+            LogDto(dtoString);
+            return Utils.DeserializeNetDCS<T>(dtoString);
+        }
+
 		public T With_DataContractJsonSerializer<T>(T dto)
 		{
 			var dtoString = Utils.SerializeDCJS(dto);
@@ -313,6 +320,7 @@ namespace Northwind.Benchmarks.Serialization
 		protected void AssertAllAreEqual<T>(T dto)
 		{
 			AssertEqual(With_DataContractSerializer(dto), dto);
+            AssertEqual(With_NetDataContractSerializer(dto), dto);
 			AssertEqual(With_DataContractJsonSerializer(dto), dto);
 			try
 			{
