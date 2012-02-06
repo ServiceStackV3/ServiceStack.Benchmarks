@@ -88,6 +88,9 @@
     <Reference Include="ServiceStack.Interfaces">
       <HintPath>..\Lib\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\Lib\ServiceStack.Text.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -121,10 +124,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\ServiceStack.Text\src\ServiceStack.Text\ServiceStack.Text.csproj">
-      <Project>{579B3FDB-CDAD-44E1-8417-885C38E49A0E}</Project>
-      <Name>ServiceStack.Text</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Northwind.Common\Northwind.Common.csproj">
       <Project>{495EBC3A-0F73-4D25-9641-D6ECA70D0026}</Project>
       <Name>Northwind.Common</Name>
