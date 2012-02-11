@@ -56,6 +56,7 @@ namespace Northwind.Common.DataModel
 
 		public byte[] Photo { get; set; }
 
+        [StringLength(8000)]
 		public string Notes { get; set; }
 
 		[References(typeof(Employee))]
@@ -77,7 +78,7 @@ namespace Northwind.Common.DataModel
 		[StringLength(15)]
 		public string CategoryName { get; set; }
 
-		[StringLength(10)]
+		[StringLength(100)]
 		public string Description { get; set; }
 
 		public byte[] Picture { get; set; }
@@ -195,7 +196,7 @@ namespace Northwind.Common.DataModel
 	public class Order
 		: IHasIntId
 	{
-		[AutoIncrement]
+		//[AutoIncrement]
 		[Alias("OrderID")]
 		public int Id { get; set; }
 
@@ -206,7 +207,7 @@ namespace Northwind.Common.DataModel
 		public string CustomerId { get; set; }
 
 		[Index]
-		[References(typeof(Customer))]
+		[References(typeof(Employee))]
 		[Alias("EmployeeID")]
 		public int EmployeeId { get; set; }
 
