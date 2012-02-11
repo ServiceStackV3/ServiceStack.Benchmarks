@@ -199,6 +199,49 @@ namespace Northwind.Benchmarks.Serialization
             }
         }
 
+        public static T DeserializeNetDCS<T>(string xml)
+        {
+            var type = typeof(T);
+            return (T)DeserializeNetDCS(xml, type);
+        }
+
+        public static object DeserializeNetDCS(string xml, Type type)
+        {
+            try
+            {
+                var bytes = Encoding.UTF8.GetBytes(xml);
+
+                using (var reader = XmlDictionaryReader.CreateTextReader(bytes, new XmlDictionaryReaderQuotas()))
+                {
+                    var serializer = new NetDataContractSerializer();
+                    return serializer.ReadObject(reader);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException("DeserializeNetDataContract: Error converting type: " + ex.Message, ex);
+            }
+        }
+
+        public static string SerializeNetDCS<T>(T from)
+        {
+            try
+            {
+                using (var stream = new MemoryStream())
+                {
+                    var serializer = new NetDataContractSerializer();
+                    serializer.Serialize(stream, from);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    var reader = new StreamReader(stream);
+                    return reader.ReadToEnd();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException(string.Format("SerializeNetDataContract: Error serializing object of type {0}", from.GetType().FullName), ex);
+            }
+        }
+
 		public static object DeserializeDCJS(string json, Type returnType)
 		{
 			try
