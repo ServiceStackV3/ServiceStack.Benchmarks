@@ -11,7 +11,7 @@ namespace Northwind.Benchmarks.Console
 				noOfIterations = 100000;
 
 			Run_NorthwindDatabaseRowsSerialization(noOfIterations);
-			//Run_NorthwindDatabaseTablesSerialization(noOfIterations);
+			Run_NorthwindDatabaseTablesSerialization(noOfIterations / 100);
 		}
 
 		private static void Run_NorthwindDatabaseRowsSerialization(int iterations)
