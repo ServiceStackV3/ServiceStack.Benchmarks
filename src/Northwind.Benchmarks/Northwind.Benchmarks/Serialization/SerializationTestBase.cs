@@ -383,11 +383,11 @@ namespace Northwind.Benchmarks.Serialization
 					() => Utils.DeserializeDCS<T>(dtoMsXml)
 				);
 
-                var dtoMsNetXml = Utils.SerializeNetDCS(dto);
-                RecordRunResults("MS NetDataContractSerializer " + typeof(NetDataContractSerializer).AssemblyVersion(), dtoMsNetXml,
-                    () => Utils.SerializeNetDCS(dto),
-                    () => Utils.DeserializeNetDCS<T>(dtoMsNetXml)
-                );
+                //var dtoMsNetXml = Utils.SerializeNetDCS(dto);
+                //RecordRunResults("MS NetDataContractSerializer " + typeof(NetDataContractSerializer).AssemblyVersion(), dtoMsNetXml,
+                //    () => Utils.SerializeNetDCS(dto),
+                //    () => Utils.DeserializeNetDCS<T>(dtoMsNetXml)
+                //);
 
                 var dtoMsJson = Utils.SerializeDCJS(dto);
                 RecordRunResults("MS JsonDataContractSerializer " + typeof(DataContractJsonSerializer).AssemblyVersion(), dtoMsJson,
@@ -395,21 +395,21 @@ namespace Northwind.Benchmarks.Serialization
                     () => Utils.DeserializeDCJS<T>(dtoMsJson)
                 );
 
-                var dtoMsXmlSerializer = Utils.SerializeXmlSerializer(dto);
-                RecordRunResults("MS XmlSerializer " + typeof(System.Xml.Serialization.XmlSerializer).AssemblyVersion(), dtoMsXmlSerializer,
-                    () => Utils.SerializeXmlSerializer(dto),
-                    () => Utils.DeserializeXmlSerializer<T>(dtoMsXmlSerializer)
-                );
+                //var dtoMsXmlSerializer = Utils.SerializeXmlSerializer(dto);
+                //RecordRunResults("MS XmlSerializer " + typeof(System.Xml.Serialization.XmlSerializer).AssemblyVersion(), dtoMsXmlSerializer,
+                //    () => Utils.SerializeXmlSerializer(dto),
+                //    () => Utils.DeserializeXmlSerializer<T>(dtoMsXmlSerializer)
+                //);
 
 				if (this.MultipleIterations.Sum() <= 10)
 				{
 					//To slow to include, up to 280x slower than ProtoBuf - painful to wait for.
-					var js = new JavaScriptSerializer();
-					var dtoJs = js.Serialize(dto);
-					RecordRunResults("MS JavaScriptSerializer " + typeof(JavaScriptSerializer).AssemblyVersion(), dtoJs,
-						() => js.Serialize(dto),
-						() => js.Deserialize<T>(dtoJs)
-					);
+          //var js = new JavaScriptSerializer();
+          //var dtoJs = js.Serialize(dto);
+          //RecordRunResults("MS JavaScriptSerializer " + typeof(JavaScriptSerializer).AssemblyVersion(), dtoJs,
+          //  () => js.Serialize(dto),
+          //  () => js.Deserialize<T>(dtoJs)
+          //);
 
 					//Doesn't handle complex types, e.g. Lists, etc - and its Slow?!
 					//var jayRockString = Jayrock.Json.Conversion.JsonConvert.ExportToString(dto);
@@ -419,11 +419,11 @@ namespace Northwind.Benchmarks.Serialization
 					//);
 				}
 
-				var msBytes = Utils.SerializeBinaryFormatter(dto);
-				RecordRunResults("MS BinaryFormatter " + typeof(BinaryFormatter).AssemblyVersion(), msBytes,
-					() => Utils.SerializeBinaryFormatter(dto),
-					() => Utils.DeserializeBinaryFormatter<T>(msBytes)
-				);
+        //var msBytes = Utils.SerializeBinaryFormatter(dto);
+        //RecordRunResults("MS BinaryFormatter " + typeof(BinaryFormatter).AssemblyVersion(), msBytes,
+        //  () => Utils.SerializeBinaryFormatter(dto),
+        //  () => Utils.DeserializeBinaryFormatter<T>(msBytes)
+        //);
 
 				//1000x slower than ProtoBuf? WTF? I'm not waiting for this
 				//var xaml = Utils.SerializeXaml(dto);
@@ -432,17 +432,17 @@ namespace Northwind.Benchmarks.Serialization
 				//    () => Utils.DeserializeXaml<T>(xaml)
 				//);
 
-				var dtoJsonFx = Utils.SerializeJsonFx(dto);
-				RecordRunResults("JsonFx " + typeof(JsonFx.Json.JsonWriter).AssemblyVersion(), dtoJsonFx,
-					() => Utils.SerializeJsonFx(dto),
-					() => Utils.DeserializeJsonFx<T>(dtoJsonFx)
-				);
+        //var dtoJsonFx = Utils.SerializeJsonFx(dto);
+        //RecordRunResults("JsonFx " + typeof(JsonFx.Json.JsonWriter).AssemblyVersion(), dtoJsonFx,
+        //  () => Utils.SerializeJsonFx(dto),
+        //  () => Utils.DeserializeJsonFx<T>(dtoJsonFx)
+        //);
 
-				var dtoProtoBuf = ProtoBufToBytes(dto);
-				RecordRunResults("ProtoBuf.net " + typeof(ProtoBuf.Serializer).AssemblyVersion(), dtoProtoBuf,
-					() => ProtoBufToBytes(dto),
-					() => ProtoBufFromBytes<T>(dtoProtoBuf)
-				);
+        //var dtoProtoBuf = ProtoBufToBytes(dto);
+        //RecordRunResults("ProtoBuf.net " + typeof(ProtoBuf.Serializer).AssemblyVersion(), dtoProtoBuf,
+        //  () => ProtoBufToBytes(dto),
+        //  () => ProtoBufFromBytes<T>(dtoProtoBuf)
+        //);
 
 				//Unstable, frequently throws errors
 				//var dtoMsgPack = MsgPackToBytes(dto);
@@ -457,11 +457,11 @@ namespace Northwind.Benchmarks.Serialization
                     () => Newtonsoft.Json.JsonConvert.DeserializeObject<T>(dtoJsonNet)
                 );
 
-                var bsonJsonNet = Utils.SerializeJsonNetBson(dto);
-                RecordRunResults("JSON .NET BSON " + typeof(Newtonsoft.Json.Bson.BsonWriter).AssemblyVersion(), bsonJsonNet,
-                    () => Utils.SerializeJsonNetBson(dto),
-                    () => Utils.DeserializeJsonNetBson<T>(bsonJsonNet)
-                );
+                //var bsonJsonNet = Utils.SerializeJsonNetBson(dto);
+                //RecordRunResults("JSON .NET BSON " + typeof(Newtonsoft.Json.Bson.BsonWriter).AssemblyVersion(), bsonJsonNet,
+                //    () => Utils.SerializeJsonNetBson(dto),
+                //    () => Utils.DeserializeJsonNetBson<T>(bsonJsonNet)
+                //);
             }
 
 			var dtoJson = ServiceStack.Text.JsonSerializer.SerializeToString(dto);
@@ -470,11 +470,11 @@ namespace Northwind.Benchmarks.Serialization
 				() => ServiceStack.Text.JsonSerializer.DeserializeFromString<T>(dtoJson)
 			);
 
-			var dtoJsv = TypeSerializer.SerializeToString(dto);
-			RecordRunResults("ServiceStack Jsv " + typeof(ServiceStack.Text.TypeSerializer).AssemblyVersion(), dtoJsv,
-				() => TypeSerializer.SerializeToString(dto),
-				() => TypeSerializer.DeserializeFromString<T>(dtoJsv)
-			);
+      //var dtoJsv = TypeSerializer.SerializeToString(dto);
+      //RecordRunResults("ServiceStack Jsv " + typeof(ServiceStack.Text.TypeSerializer).AssemblyVersion(), dtoJsv,
+      //  () => TypeSerializer.SerializeToString(dto),
+      //  () => TypeSerializer.DeserializeFromString<T>(dtoJsv)
+      //);
 
 			CalculateBestTimes(TestResults);
 		}
@@ -518,7 +518,7 @@ namespace Northwind.Benchmarks.Serialization
 
 		public void GenerateHtmlReport(string htmlSummary)
 		{
-			var path = @"C:\src\ServiceStack.Benchmarks\src\Northwind.Benchmarks\Northwind.Benchmarks\_Results\Serialization\"
+			var path = Path.GetDirectoryName(GetType().Assembly.Location) + @"\"
 				+ string.Format("{0}.{1}-times.{2:yyyy-MM-dd}.html",
 					GetType().Name, this.MultipleIterations.Sum(), DateTime.Now);
 
