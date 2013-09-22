@@ -1,14 +1,14 @@
 using System;
 using Northwind.Common.DataModel;
 using Northwind.Perf;
-using ServiceStack.DataAccess;
+using ServiceStack.Data;
 
 namespace Northwind.Benchmarks.BasicPersistenceProviders
 {
 	public abstract class BasicPersistenceProviderScenarioBase
 		: ScenarioBase
 	{
-		protected abstract IBasicPersistenceProvider CreateProvider();
+		protected abstract IEntityStore CreateProvider();
 
 		protected int Iteration;
 		public bool IsFirstRun
@@ -26,9 +26,9 @@ namespace Northwind.Benchmarks.BasicPersistenceProviders
 			this.Iteration++;
 		}
 
-		public virtual void OnBeforeRun(IBasicPersistenceProvider provider) {}
+        public virtual void OnBeforeRun(IEntityStore provider) { }
 
-		public void Run(IBasicPersistenceProvider provider)
+        public void Run(IEntityStore provider)
 		{
 			if (this.IsFirstRun)
 			{

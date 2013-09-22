@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using ServiceStack.DataAnnotations;
-using ServiceStack.DesignPatterns.Model;
+using ServiceStack.Model;
 
 namespace Northwind.Common.DataModel
 {

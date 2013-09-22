@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 using ProtoBuf;
-using ServiceStack.DesignPatterns.Model;
+using ServiceStack.Model;
 
 namespace Northwind.Common.ServiceModel
 {

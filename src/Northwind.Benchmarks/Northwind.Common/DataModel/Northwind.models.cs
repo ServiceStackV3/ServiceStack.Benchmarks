@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using ServiceStack.DataAnnotations;
-using ServiceStack.DesignPatterns.Model;
+using ServiceStack.Model;
 
 namespace Northwind.Common.DataModel
 {
