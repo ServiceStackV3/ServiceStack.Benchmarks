@@ -21,24 +21,24 @@ namespace ServiceStack.Northwind.Tests
 
             NorthwindData.LoadData();
 
-            dbFactory.Exec(dbCmd =>
+            using (var db = dbFactory.Open())
             {
-                dbCmd.CreateTables(false, NorthwindFactory.ModelTypes.ToArray());
+                db.CreateTables(overwrite:false, tableTypes:NorthwindFactory.ModelTypes.ToArray());
 
-                dbCmd.SaveAll(NorthwindData.Categories);
-                dbCmd.SaveAll(NorthwindData.Customers);
-                dbCmd.SaveAll(NorthwindData.CustomerCustomerDemos);
-                dbCmd.SaveAll(NorthwindData.Employees);
-                dbCmd.SaveAll(NorthwindData.EmployeeTerritories);
-                dbCmd.SaveAll(NorthwindData.OrderDetails);
-                dbCmd.SaveAll(NorthwindData.Orders);
-                dbCmd.SaveAll(NorthwindData.Products);
-                dbCmd.SaveAll(NorthwindData.Products);
-                dbCmd.SaveAll(NorthwindData.Regions);
-                dbCmd.SaveAll(NorthwindData.Shippers);
-                dbCmd.SaveAll(NorthwindData.Suppliers);
-                dbCmd.SaveAll(NorthwindData.Territories);
-            });
+                db.SaveAll(NorthwindData.Categories);
+                db.SaveAll(NorthwindData.Customers);
+                db.SaveAll(NorthwindData.CustomerCustomerDemos);
+                db.SaveAll(NorthwindData.Employees);
+                db.SaveAll(NorthwindData.EmployeeTerritories);
+                db.SaveAll(NorthwindData.OrderDetails);
+                db.SaveAll(NorthwindData.Orders);
+                db.SaveAll(NorthwindData.Products);
+                db.SaveAll(NorthwindData.Products);
+                db.SaveAll(NorthwindData.Regions);
+                db.SaveAll(NorthwindData.Shippers);
+                db.SaveAll(NorthwindData.Suppliers);
+                db.SaveAll(NorthwindData.Territories);
+            }
         }
     }
 }
