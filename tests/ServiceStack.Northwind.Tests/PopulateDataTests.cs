@@ -15,9 +15,10 @@ namespace ServiceStack.Northwind.Tests
         {
             var dbPath = "~/App_Data/db.sqlite".MapAbsolutePath();
             var dbFactory = new OrmLiteConnectionFactory(
-                dbPath, SqliteOrmLiteDialectProvider.Instance);
+                dbPath, SqliteDialect.Provider);
 
-            if (File.Exists(dbPath)) File.Delete(dbPath);
+            if (File.Exists(dbPath)) 
+                File.Delete(dbPath);
 
             NorthwindData.LoadData();
 
